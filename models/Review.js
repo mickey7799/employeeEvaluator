@@ -43,13 +43,7 @@ const ReviewSchema = new Schema({
   ],
   reviewers: [
     {
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-      },
-      name: {
-        type: String
-      }
+      type: String
     }
   ],
   date: {

@@ -7,7 +7,8 @@ const ProfileSchema = new Schema({
     ref: 'user'
   },
   department: {
-    type: String
+    type: String,
+    required: true
   },
   status: {
     type: String,

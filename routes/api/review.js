@@ -28,8 +28,8 @@ router.post(
     }
 
     try {
+      console.log('in api');
       const user = await User.findById(req.params.user_id).select('-password');
-
       const { text, rating, reviewers } = req.body;
       const newReview = new Review({
         user: user._id,
@@ -37,23 +37,23 @@ router.post(
         name: user.name,
         avatar: user.avatar,
         rating: rating,
-        reviewers: reviewers
+        reviewers: [reviewers]
       });
       const review = await newReview.save();
       res.json(review);
     } catch (err) {
-      console.err(err.message);
+      console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
 );
 
-// @route GET api/reviews/user/:user_id
-// @desc  GET all reviews for an employee
+// @route GET api/reviews
+// @desc  GET all reviews
 // @access Private
-router.get('/user/:user_id', auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
-    const reviews = await Review.findOne({ user: req.params.user_id }).sort({
+    const reviews = await Review.find().sort({
       date: -1
     }); //most recent first
     res.json(reviews);
