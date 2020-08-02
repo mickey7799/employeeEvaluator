@@ -6,6 +6,10 @@ const ReviewSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users'
   },
+  admin: {
+    type: Schema.Types.ObjectId,
+    ref: 'users'
+  },
   text: {
     type: String,
     required: true

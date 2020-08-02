@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ReviewItem from './ReviewItem';
 import ReviewForm from './ReviewForm';
@@ -13,7 +14,7 @@ const Reviews = ({
   getReviewsByUserId,
   getReviewsByReviewerId,
   getProfiles,
-  review: { reviews },
+  review: { reviews, review },
   profile: { profiles },
   auth: { user },
   match: { params }
@@ -29,11 +30,18 @@ const Reviews = ({
       <h1 className='large text-primary'>Performance Reviews</h1>
       {user.isAdmin ? (
         <div>
+          <Link to='/profiles' className='btn my-1'>
+            Back To Employee Profiles
+          </Link>
           <p className='lead'>
             <i className='fas fa-user' /> Please give performance reviews to
             employees
           </p>
-          <ReviewForm employee_id={params.id} profiles={profiles} />
+          <ReviewForm
+            employee_id={params.id}
+            profiles={profiles}
+            review={review}
+          />
         </div>
       ) : (
         <p className='lead'>

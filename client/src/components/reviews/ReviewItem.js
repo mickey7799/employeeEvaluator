@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { deleteReview } from '../../actions/review';
+import { deleteReview, getReview } from '../../actions/review';
 
 const ReviewItem = ({
-  deletePost,
+  deleteReview,
+  getReview,
   auth,
   review: { _id, text, name, avatar, user, feedbacks, rating, date },
   showActions
@@ -37,14 +38,24 @@ const ReviewItem = ({
               <span className='comment-count'>{feedbacks.length}</span>
             )}
           </Link>
+
           {!auth.loading && auth.user.isAdmin && (
-            <button
-              onClick={() => deletePost(_id)}
-              type='button'
-              className='btn btn-danger'
-            >
-              <i className='fas fa-times' />
-            </button>
+            <Fragment>
+              <button
+                onClick={() => getReview(_id)}
+                type='button'
+                className='btn btn-light'
+              >
+                Edit Review
+              </button>
+              <button
+                onClick={() => deleteReview(_id)}
+                type='button'
+                className='btn btn-danger'
+              >
+                <i className='fas fa-times' />
+              </button>
+            </Fragment>
           )}
         </Fragment>
       )}
@@ -59,7 +70,8 @@ ReviewItem.defaultProps = {
 ReviewItem.propTypes = {
   review: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  deletePost: PropTypes.func.isRequired,
+  deleteReview: PropTypes.func.isRequired,
+  getReview: PropTypes.func.isRequired,
   showActions: PropTypes.bool
 };
 
@@ -69,5 +81,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { deletePost: deleteReview }
+  { deleteReview, getReview }
 )(ReviewItem);

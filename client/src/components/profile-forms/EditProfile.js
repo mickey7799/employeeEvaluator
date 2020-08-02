@@ -74,7 +74,7 @@ const EditProfile = ({
         <div className='form-group'>
           <input
             type='text'
-            placeholder='Role'
+            placeholder='* Role'
             name='status'
             value={status}
             onChange={e => onChange(e)}

@@ -10,6 +10,7 @@ import { getProfileById, deleteEmployee } from '../../actions/profile';
 
 const Profile = ({
   getProfileById,
+  deleteEmployee,
   profile: { profile, loading },
   auth,
   match: { params },
@@ -39,8 +40,7 @@ const Profile = ({
             <button
               className='btn btn-danger'
               onClick={() => {
-                deleteEmployee(params.id);
-                history.push('/profiles');
+                deleteEmployee(params.id, history);
               }}
             >
               <i className='fas fa-user-minus'></i> Delete This Employee
@@ -62,6 +62,7 @@ const Profile = ({
 
 Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
+  deleteEmployee: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
@@ -73,5 +74,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getProfileById }
+  { getProfileById, deleteEmployee }
 )(Profile);

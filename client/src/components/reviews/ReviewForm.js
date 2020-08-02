@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addReview } from '../../actions/review';
 
-const ReviewForm = ({ addPost, employee_id, profiles }) => {
+const ReviewForm = ({ addReview, employee_id, profiles, review }) => {
   const [formData, setFormData] = useState({
     reviewers: '',
     rating: '',
     text: ''
   });
+
+  useEffect(() => {
+    if (review !== null) {
+      setFormData({
+        reviewers: [review.reviewers],
+        rating: review.rating,
+        text: review.text
+      });
+    }
+  }, [review]);
 
   const { reviewers, rating, text } = formData;
 
@@ -17,7 +27,7 @@ const ReviewForm = ({ addPost, employee_id, profiles }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    addPost(employee_id, formData);
+    addReview(employee_id, review._id, formData, !review == null);
     setFormData({
       reviewers: '',
       rating: '',
@@ -79,10 +89,10 @@ const ReviewForm = ({ addPost, employee_id, profiles }) => {
 };
 
 ReviewForm.propTypes = {
-  addPost: PropTypes.func.isRequired
+  addReview: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { addPost: addReview }
+  { addReview }
 )(ReviewForm);

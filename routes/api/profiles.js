@@ -41,7 +41,7 @@ router.post(
       check('skills', 'Skills is required')
         .not()
         .isEmpty(),
-      check('status', 'Status is required')
+      check('status', 'Role is required')
         .not()
         .isEmpty()
     ]

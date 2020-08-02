@@ -3,7 +3,9 @@ import {
   REVIEW_ERROR,
   DELETE_REVIEW,
   ADD_REVIEW,
+  UPDATE_REVIEW,
   GET_REVIEW,
+  CLEAR_REVIEW,
   ADD_FEEDBACK,
   REMOVE_FEEDBACK
 } from '../actions/types';
@@ -36,6 +38,21 @@ export default function(state = initialState, action) {
         ...state,
         reviews: [payload, ...state.reviews],
         loading: false
+      };
+    case UPDATE_REVIEW:
+      return {
+        ...state,
+        reviews: [
+          payload.data,
+          ...state.reviews.filter(review => review._id !== payload.id)
+        ],
+        review: null,
+        loading: false
+      };
+    case CLEAR_REVIEW:
+      return {
+        ...state,
+        review: null
       };
     case DELETE_REVIEW:
       return {

@@ -63,6 +63,30 @@ export const getGithubRepos = username => async dispatch => {
   }
 };
 
+//Creare new employee account and profile
+export const createEmployee = (formData, history) => async dispatch => {
+  try {
+    console.log('before post, in create');
+    await axios.post('/api/users/employee', formData);
+    console.log('in create');
+    history.push('/profiles');
+    console.log('after push, in create');
+    // dispatch(setAlert(edit ? 'Profile Update' : 'Profile Created', 'success'));
+    // if (!edit) {
+    //   history.push('/dashboard');
+    // }
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
 //Creare or update profile
 export const createProfile = (
   formData,
@@ -116,11 +140,13 @@ export const deleteAccount = () => async dispatch => {
 };
 
 // Delete employee's account and profile
-export const deleteEmployee = employee_id => async dispatch => {
+export const deleteEmployee = (employee_id, history) => async dispatch => {
+  console.log('in delete');
   if (window.confirm('Are you sure? This can NOT be undone!')) {
     try {
       await axios.delete(`/api/profile/${employee_id}`);
       dispatch(setAlert('This employee has been permanantly deleted'));
+      history.push('/profiles');
     } catch (err) {
       dispatch({
         type: PROFILE_ERROR,

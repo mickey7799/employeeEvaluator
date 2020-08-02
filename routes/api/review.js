@@ -5,11 +5,11 @@ const { check, validationResult } = require('express-validator');
 const Review = require('../../models/Review');
 const User = require('../../models/User');
 
-// @route POST api/reviews/:user_id
-// @desc  Create a review for an employee
+// @route POST api/reviews/:employee_id/:id
+// @desc  Create or update a review for an employee by review id
 // @access Private
 router.post(
-  '/:user_id',
+  '/:employee_id/:id',
   [
     auth,
     [
@@ -26,20 +26,31 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
     try {
-      console.log('in api');
-      const user = await User.findById(req.params.user_id).select('-password');
+      const user = await User.findById(req.params.employee_id).select(
+        '-password'
+      );
       const { text, rating, reviewers } = req.body;
-      const newReview = new Review({
+      let newReview = {
         user: user._id,
+        admin: req.user.id,
         text: text,
         name: user.name,
         avatar: user.avatar,
         rating: rating,
         reviewers: [reviewers]
-      });
-      const review = await newReview.save();
+      };
+      let review = await Review.findById(req.params.id);
+      if (review) {
+        review = await Review.findOneAndUpdate(
+          { _id: req.params.id },
+          { $set: newReview },
+          { new: true }
+        );
+        return res.json(review);
+      }
+      review = new Review(newReview);
+      await review.save();
       res.json(review);
     } catch (err) {
       console.error(err.message);
@@ -93,7 +104,7 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(404).json({ msg: 'Performance review not found' });
     }
     // Check user
-    if (review.user.toString() !== req.user.id) {
+    if (review.admin.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
     await review.remove();

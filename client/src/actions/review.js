@@ -5,7 +5,9 @@ import {
   REVIEW_ERROR,
   DELETE_REVIEW,
   ADD_REVIEW,
+  UPDATE_REVIEW,
   GET_REVIEW,
+  CLEAR_REVIEW,
   ADD_FEEDBACK,
   REMOVE_FEEDBACK
 } from './types';
@@ -75,23 +77,55 @@ export const deleteReview = id => async dispatch => {
 };
 
 // Add review
-export const addReview = (employee_id, formData) => async dispatch => {
+export const addReview = (
+  employee_id,
+  id,
+  formData,
+  edited
+) => async dispatch => {
   try {
-    const res = await axios.post(`/api/reviews/${employee_id}`, formData);
+    const res = await axios.post(`/api/reviews/${employee_id}/${id}`, formData);
+    if (edited) {
+      dispatch({ type: UPDATE_REVIEW, payload: { data: res.data, id: id } });
+    } else {
+      dispatch({
+        type: ADD_REVIEW,
+        payload: res.data
+      });
+    }
 
-    dispatch({
-      type: ADD_REVIEW,
-      payload: res.data
-    });
-
-    dispatch(setAlert('Review Created', 'success'));
+    dispatch(setAlert(edited ? 'Review Updated' : 'Review Created', 'success'));
   } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
     dispatch({
       type: REVIEW_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
+
+// // Update review
+// export const updateReview = (user_id, id, formdata) => async dispatch => {
+//   try {
+//     const res = await axios.post(`/api/reviews/${user_id}/${id}`, formdata);
+//     dispatch({ type: UPDATE_REVIEW, payload: { data: res.data, id: id } });
+//     dispatch(setAlert('Review Updated', 'success'));
+//   } catch (err) {
+//     const errors = err.response.data.errors;
+
+//     if (errors) {
+//       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+//     }
+
+//     dispatch({
+//       type: REVIEW_ERROR,
+//       payload: { msg: err.response.statusText, status: err.response.status }
+//     });
+//   }
+// };
 
 // Get review
 export const getReview = id => async dispatch => {
@@ -108,6 +142,11 @@ export const getReview = id => async dispatch => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
+};
+
+// Clear review
+export const clearReview = () => async dispatch => {
+  dispatch({ type: CLEAR_REVIEW });
 };
 
 // Add feedback

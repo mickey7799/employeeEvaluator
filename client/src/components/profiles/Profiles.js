@@ -4,8 +4,13 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import ProfileItem from './ProfileItem';
 import { getProfiles } from '../../actions/profile';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
-const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
+const Profiles = ({
+  getProfiles,
+  profile: { profiles, loading },
+  auth: { user }
+}) => {
   useEffect(() => {
     getProfiles();
   }, [getProfiles]);
@@ -20,6 +25,11 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
             <i className='fab fa-connectdevelop'></i> View employee profiles or
             give performance reviews to each employee
           </p>
+          {user && user.isAdmin && (
+            <Link to='/admin-create-profile' className='btn btn-dark my-1'>
+              <i className='fas fa-user-minus'></i> Create a New Employee
+            </Link>
+          )}
           <div className='profiles'>
             {profiles.length > 0 ? (
               profiles.map(profile => (
@@ -37,10 +47,12 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
 
 Profiles.propTypes = {
   getProfiles: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
-  profile: state.profile
+  profile: state.profile,
+  auth: state.auth
 });
 export default connect(
   mapStateToProps,

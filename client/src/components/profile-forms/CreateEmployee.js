@@ -1,11 +1,17 @@
 import React, { useState, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { setAlert } from '../../actions/alert';
 import { connect } from 'react-redux';
-import { createProfile } from '../../actions/profile';
+import { createEmployee } from '../../actions/profile';
 
-const CreateProfile = ({ createProfile, history }) => {
+const CreateEmployee = ({ createEmployee, setAlert, history }) => {
   const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    password2: '',
+    isAdmin: false,
     department: '',
     status: '',
     skills: '',
@@ -13,25 +19,93 @@ const CreateProfile = ({ createProfile, history }) => {
     bio: ''
   });
 
-  const { department, status, skills, githubusername, bio } = formData;
+  const {
+    name,
+    email,
+    password,
+    password2,
+    isAdmin,
+    department,
+    status,
+    skills,
+    githubusername,
+    bio
+  } = formData;
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
-    createProfile(formData, history);
+    if (password !== password2) {
+      setAlert('passwords do not match', 'danger');
+    } else {
+      createEmployee(formData, history);
+    }
   };
 
   return (
     <Fragment>
-      <h1 className='large text-primary'>Create The Employee Profile</h1>
-      <p className='lead'>
-        <i className='fas fa-user'></i> Let's get some information to help our
-        performance review process
-      </p>
+      <h1 className='large text-primary'>
+        Create The Employee Account & Profile
+      </h1>
       <small>* = required field</small>
+
       <form className='form' onSubmit={e => onSubmit(e)}>
+        <div className='form-group'>
+          <input
+            type='text'
+            placeholder='Name'
+            name='name'
+            value={name}
+            required
+            onChange={e => onChange(e)}
+          />
+        </div>
+        <div className='form-group'>
+          <input
+            type='email'
+            placeholder='Email Address'
+            name='email'
+            value={email}
+            required
+            onChange={e => onChange(e)}
+          />
+        </div>
+        <div className='form-group'>
+          <input
+            type='password'
+            placeholder='Password'
+            name='password'
+            value={password}
+            minLength='6'
+            onChange={e => onChange(e)}
+          />
+        </div>
+        <div className='form-group'>
+          <input
+            type='password'
+            placeholder='Confirm Password'
+            name='password2'
+            value={password2}
+            minLength='6'
+            onChange={e => onChange(e)}
+          />
+        </div>
+        <div className='form-group'>
+          <p>
+            <input
+              type='checkbox'
+              name='isAdmin'
+              checked={isAdmin}
+              value={isAdmin}
+              onChange={e => {
+                setFormData({ ...formData, isAdmin: !isAdmin });
+              }}
+            />{' '}
+            Set this employee to be an admin user
+          </p>
+        </div>
         <div className='form-group'>
           <select
             name='department'
@@ -58,7 +132,6 @@ const CreateProfile = ({ createProfile, history }) => {
             value={status}
             onChange={e => onChange(e)}
           />
-          <small className='form-text'>Your role in the department</small>
         </div>
 
         <div className='form-group'>
@@ -82,21 +155,20 @@ const CreateProfile = ({ createProfile, history }) => {
             onChange={e => onChange(e)}
           />
           <small className='form-text'>
-            If you are in R&D department, please include your username
+            Include its username for employees in R&D department
           </small>
         </div>
         <div className='form-group'>
           <textarea
-            placeholder='A short bio of yourself'
+            placeholder='A short bio of its introduction'
             name='bio'
             value={bio}
             onChange={e => onChange(e)}
           ></textarea>
-          <small className='form-text'>Tell us a little about yourself</small>
         </div>
 
         <input type='submit' className='btn btn-primary my-1' />
-        <Link className='btn btn-light my-1' to='/dashboard'>
+        <Link className='btn btn-light my-1' to='/profiles'>
           Go Back
         </Link>
       </form>
@@ -104,11 +176,12 @@ const CreateProfile = ({ createProfile, history }) => {
   );
 };
 
-CreateProfile.propTypes = {
-  createProfile: PropTypes.func.isRequired
+CreateEmployee.propTypes = {
+  createEmployee: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { createProfile }
-)(withRouter(CreateProfile));
+  { createEmployee, setAlert }
+)(withRouter(CreateEmployee));
