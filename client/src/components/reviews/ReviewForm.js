@@ -23,11 +23,16 @@ const ReviewForm = ({
 
   useEffect(() => {
     clearReview();
-    console.log(formData);
   }, []);
 
   useEffect(() => {
-    if (review !== null) {
+    if (!review) {
+      setFormData({
+        reviewers: '',
+        rating: '',
+        text: ''
+      });
+    } else {
       setFormData({
         reviewers: review.reviewers,
         rating: review.rating,

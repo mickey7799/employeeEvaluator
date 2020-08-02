@@ -150,7 +150,6 @@ router.post(
         isAdmin
       });
 
-      // const user_id = await User.findOne({ email }).select('_id');
       // Encrpt password
       const salt = await bcrypt.genSalt(10); // more secure if the number is larger but might be slow
       user.password = await bcrypt.hash(password, salt);
@@ -166,7 +165,7 @@ router.post(
         status,
         githubusername
       };
-      // let profile = await Profile.findOne({ user: user._id });
+
       profile = new Profile(profileFields);
       await profile.save();
       res.json('Employee created');

@@ -27,11 +27,11 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-// @route POST api/profile
+// @route POST api/profile/:employee_id
 // @desc  Create or update user profile
 // @access Private
 router.post(
-  '/',
+  '/:employee_id',
   [
     auth,
     [
@@ -55,7 +55,7 @@ router.post(
 
     //Build profile object
     const profileFields = {
-      user: req.user.id,
+      user: req.params.employee_id,
       department,
       bio,
       skills: Array.isArray(skills)
@@ -66,11 +66,11 @@ router.post(
     };
 
     try {
-      let profile = await Profile.findOne({ user: req.user.id });
+      let profile = await Profile.findOne({ user: req.params.employee_id });
       if (profile) {
         //if profile exist, Update
         profile = await Profile.findOneAndUpdate(
-          { user: req.user.id },
+          { user: req.params.employee_id },
           { $set: profileFields },
           { new: true }
         );

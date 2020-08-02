@@ -91,16 +91,11 @@ export const createEmployee = (formData, history) => async dispatch => {
 export const createProfile = (
   formData,
   history,
+  employee_id,
   edit = false
 ) => async dispatch => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-
-    const res = await axios.post('/api/profile', formData, config);
+    const res = await axios.post(`/api/profile/${employee_id}`, formData);
     dispatch({ type: GET_PROFILE, payload: res.data });
     dispatch(setAlert(edit ? 'Profile Update' : 'Profile Created', 'success'));
     if (!edit) {
