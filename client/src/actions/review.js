@@ -16,7 +16,6 @@ import {
 export const getReviewsByUserId = employee_id => async dispatch => {
   try {
     const res = await axios.get(`/api/reviews`);
-    console.log(res.data);
     const reviewsById = res.data.filter(review => {
       return review.user.toString() === employee_id;
     });

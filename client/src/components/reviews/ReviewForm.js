@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addReview } from '../../actions/review';
+import {
+  addReview,
+  clearReview,
+  getReviewsByUserId
+} from '../../actions/review';
 
-const ReviewForm = ({ addReview, employee_id, profiles, review }) => {
+const ReviewForm = ({
+  addReview,
+  clearReview,
+  getReviewsByUserId,
+  employee_id,
+  profiles,
+  review
+}) => {
   const [formData, setFormData] = useState({
     reviewers: '',
     rating: '',
@@ -11,9 +22,14 @@ const ReviewForm = ({ addReview, employee_id, profiles, review }) => {
   });
 
   useEffect(() => {
+    clearReview();
+    console.log(formData);
+  }, []);
+
+  useEffect(() => {
     if (review !== null) {
       setFormData({
-        reviewers: [review.reviewers],
+        reviewers: review.reviewers,
         rating: review.rating,
         text: review.text
       });
@@ -27,7 +43,8 @@ const ReviewForm = ({ addReview, employee_id, profiles, review }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    addReview(employee_id, review._id, formData, !review == null);
+    addReview(employee_id, review ? review._id : 'new', formData, review);
+    getReviewsByUserId(employee_id);
     setFormData({
       reviewers: '',
       rating: '',
@@ -89,10 +106,12 @@ const ReviewForm = ({ addReview, employee_id, profiles, review }) => {
 };
 
 ReviewForm.propTypes = {
-  addReview: PropTypes.func.isRequired
+  addReview: PropTypes.func.isRequired,
+  clearReview: PropTypes.func.isRequired,
+  getReviewsByUserId: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { addReview }
+  { addReview, clearReview, getReviewsByUserId }
 )(ReviewForm);

@@ -6,14 +6,9 @@ import Spinner from '../layout/Spinner';
 import ReviewItem from '../reviews/ReviewItem';
 import FeedbackForm from './FeedbackForm';
 import FeedbackItem from './FeedbackItem';
-import { getReview, clearReview } from '../../actions/review';
+import { getReview } from '../../actions/review';
 
-const Review = ({
-  getReview,
-  clearReview,
-  review: { review, loading },
-  match
-}) => {
+const Review = ({ getReview, review: { review, loading }, match }) => {
   useEffect(() => {
     getReview(match.params.id);
   }, [getReview, match.params.id]);
@@ -22,11 +17,7 @@ const Review = ({
     <Spinner />
   ) : (
     <Fragment>
-      <Link
-        to={`/reviews/${review.user}`}
-        className='btn'
-        onClick={() => clearReview()}
-      >
+      <Link to={`/reviews/${review.user}`} className='btn'>
         Back To Performance Reviews
       </Link>
       <ReviewItem review={review} showActions={false} />
@@ -46,7 +37,6 @@ const Review = ({
 
 Review.propTypes = {
   getReview: PropTypes.func.isRequired,
-  clearReview: PropTypes.func.isRequired,
   review: PropTypes.object.isRequired
 };
 
@@ -56,5 +46,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getReview, clearReview }
+  { getReview }
 )(Review);

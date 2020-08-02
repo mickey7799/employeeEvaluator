@@ -17,7 +17,6 @@ const Dashboard = ({
     getCurrentProfile();
   }, [getCurrentProfile]);
 
-  if (profile) console.log(profile.experience);
   return loading && profile === null ? (
     <Spinner />
   ) : (

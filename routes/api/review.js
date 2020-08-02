@@ -38,20 +38,23 @@ router.post(
         name: user.name,
         avatar: user.avatar,
         rating: rating,
-        reviewers: [reviewers]
+        reviewers: reviewers
       };
-      let review = await Review.findById(req.params.id);
-      if (review) {
-        review = await Review.findOneAndUpdate(
-          { _id: req.params.id },
-          { $set: newReview },
-          { new: true }
-        );
+      if (req.params.id !== 'new') {
+        let review = await Review.findById(req.params.id);
+        if (review) {
+          review = await Review.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: newReview },
+            { new: true }
+          );
+          return res.json(review);
+        }
+      } else {
+        review = new Review(newReview);
+        await review.save();
         return res.json(review);
       }
-      review = new Review(newReview);
-      await review.save();
-      res.json(review);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
