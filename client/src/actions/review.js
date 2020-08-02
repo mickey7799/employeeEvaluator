@@ -83,7 +83,7 @@ export const addReview = (
   edited
 ) => async dispatch => {
   try {
-    const res = await axios.post(`/api/reviews/${employee_id}/${id}`, formData);
+    const res = await axios.post(`/api/reviews/${employee_id}&${id}`, formData);
     if (edited) {
       dispatch({ type: UPDATE_REVIEW, payload: { data: res.data, id: id } });
     } else {
@@ -105,26 +105,6 @@ export const addReview = (
     });
   }
 };
-
-// // Update review
-// export const updateReview = (user_id, id, formdata) => async dispatch => {
-//   try {
-//     const res = await axios.post(`/api/reviews/${user_id}/${id}`, formdata);
-//     dispatch({ type: UPDATE_REVIEW, payload: { data: res.data, id: id } });
-//     dispatch(setAlert('Review Updated', 'success'));
-//   } catch (err) {
-//     const errors = err.response.data.errors;
-
-//     if (errors) {
-//       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-//     }
-
-//     dispatch({
-//       type: REVIEW_ERROR,
-//       payload: { msg: err.response.statusText, status: err.response.status }
-//     });
-//   }
-// };
 
 // Get review
 export const getReview = id => async dispatch => {
@@ -158,7 +138,7 @@ export const addFeedback = (reviewId, formData) => async dispatch => {
       payload: res.data
     });
 
-    dispatch(setAlert('Comment Added', 'success'));
+    dispatch(setAlert('Feedback Added', 'success'));
   } catch (err) {
     dispatch({
       type: REVIEW_ERROR,

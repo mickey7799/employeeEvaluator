@@ -9,7 +9,7 @@ const User = require('../../models/User');
 // @desc  Create or update a review for an employee by review id
 // @access Private
 router.post(
-  '/:employee_id/:id',
+  '/:employee_id&:id',
   [
     auth,
     [
