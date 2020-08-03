@@ -66,15 +66,9 @@ export const getGithubRepos = username => async dispatch => {
 //Creare new employee account and profile
 export const createEmployee = (formData, history) => async dispatch => {
   try {
-    console.log('before post, in create');
     await axios.post('/api/users/employee', formData);
-    console.log('in create');
+    dispatch(setAlert('Employee Created', 'success'));
     history.push('/profiles');
-    console.log('after push, in create');
-    // dispatch(setAlert(edit ? 'Profile Update' : 'Profile Created', 'success'));
-    // if (!edit) {
-    //   history.push('/dashboard');
-    // }
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {

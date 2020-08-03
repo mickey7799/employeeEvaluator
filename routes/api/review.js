@@ -5,7 +5,7 @@ const { check, validationResult } = require('express-validator');
 const Review = require('../../models/Review');
 const User = require('../../models/User');
 
-// @route POST api/reviews/:employee_id/:id
+// @route POST api/reviews/:employee_id&:id
 // @desc  Create or update a review for an employee by review id
 // @access Private
 router.post(
