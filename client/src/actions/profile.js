@@ -130,7 +130,6 @@ export const deleteAccount = () => async dispatch => {
 
 // Delete employee's account and profile
 export const deleteEmployee = (employee_id, history) => async dispatch => {
-  console.log('in delete');
   if (window.confirm('Are you sure? This can NOT be undone!')) {
     try {
       await axios.delete(`/api/profile/${employee_id}`);

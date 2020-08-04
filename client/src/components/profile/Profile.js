@@ -20,7 +20,7 @@ const Profile = ({
     getProfileById(params.id);
   }, [getProfileById, params.id]);
   return (
-    <Fragment>
+    <Fragment data-test='component-profile'>
       {profile === null || loading ? (
         <Spinner />
       ) : (
@@ -32,7 +32,11 @@ const Profile = ({
           {auth.isAuthenticated &&
             auth.loading === false &&
             (auth.user._id === profile.user._id || auth.user.isAdmin) && (
-              <Link to='/edit-profile' className='btn btn-dark'>
+              <Link
+                data-test='edit-profile'
+                to='/edit-profile'
+                className='btn btn-dark'
+              >
                 Edit Profile
               </Link>
             )}
@@ -47,11 +51,14 @@ const Profile = ({
             </button>
           )}
           <div className='profile-grid my-1'>
-            <ProfileTop profile={profile} />
-            <ProfileAbout profile={profile} />
+            <ProfileTop data-test='profile-top' profile={profile} />
+            <ProfileAbout data-test='profile-about' profile={profile} />
 
             {profile.githubusername && (
-              <ProfileGithub username={profile.githubusername} />
+              <ProfileGithub
+                data-test='profile-github'
+                username={profile.githubusername}
+              />
             )}
           </div>
         </Fragment>

@@ -26,14 +26,22 @@ const Profiles = ({
             give performance reviews to each employee
           </p>
           {user && user.isAdmin && (
-            <Link to='/admin-create-profile' className='btn btn-dark my-1'>
+            <Link
+              to='/admin-create-profile'
+              className='btn btn-dark my-1'
+              data-test='create-employee'
+            >
               <i className='fas fa-user-minus'></i> Create a New Employee
             </Link>
           )}
           <div className='profiles'>
             {profiles.length > 0 ? (
               profiles.map(profile => (
-                <ProfileItem key={profile._id} profile={profile} />
+                <ProfileItem
+                  data-test='profile-item'
+                  key={profile._id}
+                  profile={profile}
+                />
               ))
             ) : (
               <h4>No profiles found...</h4>

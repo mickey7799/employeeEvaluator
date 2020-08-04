@@ -6,12 +6,11 @@ import {
   getReviewsByReviewerId,
   deleteReview,
   addReview,
-  createEmployee,
-  createProfile,
-  deleteAccount,
-  deleteEmployee
+  getReview,
+  clearReview,
+  addFeedback,
+  deleteFeedback
 } from './review';
-import { setAlert } from './alert';
 
 describe('Reivew action creators', () => {
   beforeEach(() => {
@@ -204,5 +203,129 @@ describe('Reivew action creators', () => {
           ...reviews.filter(review => review._id !== _id)
         ]);
       });
+  });
+
+  test('getReview: adds review to state', () => {
+    const review = {
+      user: '5f24ee06a2c4e08896cd1b3c',
+      text: 'R&D',
+      rating: 5,
+      _id: 1
+    };
+
+    const _id = 1;
+
+    const store = storeFactory();
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: review
+      });
+    });
+
+    return store.dispatch(getReview(_id)).then(() => {
+      const newState = store.getState().review;
+      expect(newState.review).toEqual(review);
+    });
+  });
+
+  test('clearReview: clear review from state', () => {
+    const review = {
+      user: '5f24ee06a2c4e08896cd1b3c',
+      text: 'R&D',
+      rating: 5,
+      _id: 1
+    };
+
+    const store = storeFactory({
+      alert: [],
+      auth: {},
+      profile: {},
+      review: {
+        reviews: null,
+        review: review,
+        loading: true,
+        error: {}
+      }
+    });
+
+    return store.dispatch(clearReview()).then(() => {
+      const newState = store.getState().review;
+      expect(newState.review).toEqual(null);
+    });
+  });
+
+  test('addFeedback: adds feedback to review', () => {
+    const review = {
+      user: '5f24ee06a2c4e08896cd1b3c',
+      text: 'R&D',
+      rating: 5,
+      _id: 1,
+      feedbacks: []
+    };
+
+    const _id = 1;
+    const formData = { text: 'Good', _id: 1, name: 'Amy' };
+
+    const store = storeFactory();
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: formData
+      });
+    });
+
+    return store.dispatch(addFeedback(_id)).then(() => {
+      const newState = store.getState().review;
+      expect(newState.review.feedbacks).toEqual(formData);
+    });
+  });
+
+  test('deleteFeedback: deletes feedback from a review', () => {
+    const review = {
+      user: '5f24ee06a2c4e08896cd1b3c',
+      text: 'R&D',
+      rating: 5,
+      _id: 1,
+      feedbacks: [
+        { text: 'Good', _id: 1, name: 'Amy' },
+        { text: 'Nice', _id: 2, name: 'Amy' }
+      ]
+    };
+
+    const review_id = 1;
+    const _id = 2;
+    const newfeedbacks = review.feedbacks.filter(
+      feedback => feedback._id !== _id
+    );
+
+    const store = storeFactory({
+      alert: [],
+      auth: {},
+      profile: {},
+      review: {
+        reviews: null,
+        review: review,
+        loading: true,
+        error: {}
+      }
+    });
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: { msg: 'Performance review deleted' }
+      });
+    });
+
+    return store.dispatch(deleteFeedback(review_id, _id)).then(() => {
+      const newState = store.getState().review;
+      expect(newState.review.feedbacks).toEqual(newfeedbacks);
+    });
   });
 });

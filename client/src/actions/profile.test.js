@@ -15,7 +15,6 @@ import {
 describe('Profile action creators', () => {
   beforeEach(() => {
     moxios.install();
-    window.alert = jest.fn();
   });
   afterEach(() => {
     moxios.uninstall();
@@ -196,7 +195,8 @@ describe('Profile action creators', () => {
   });
 
   test('deleteAccount: clears profile to profile state and clears token in auth state', () => {
-    window.alert.mockClear();
+    window.confirm = jest.fn(() => true);
+    window.confirm.mockClear();
     const profile = {
       skills: ['JS'],
       user: { name: 'Amy' },
@@ -228,13 +228,33 @@ describe('Profile action creators', () => {
         response: { msg: 'User deleted' }
       });
     });
-
     return store.dispatch(deleteAccount()).then(() => {
       const newStateProfile = store.getState().profile;
       const newStateAuth = store.getState().auth;
       expect(newStateProfile.profile).toEqual(null);
       expect(newStateAuth.token).toEqual(null);
       expect(newStateAuth.isAuthenticated).toEqual(false);
+    });
+  });
+
+  test('deleteEmployee: clears profile to profile state and clears token in auth state', () => {
+    window.confirm = jest.fn(() => true);
+    window.confirm.mockClear();
+    const employee_id = '5f24ee06a2c4e08896cd1b3c';
+    const historyMock = { push: jest.fn() };
+    const store = storeFactory();
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: { msg: 'Employee not found' }
+      });
+    });
+    return store.dispatch(deleteEmployee(employee_id, historyMock)).then(() => {
+      const newStateAlert = store.getState().alert;
+      expect(newStateAlert[0].msg).toBe(
+        'This employee has been permanantly deleted'
+      );
     });
   });
 });
