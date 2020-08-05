@@ -8,7 +8,7 @@ import ProfileAbout from './ProfileAbout';
 import ProfileGithub from './ProfileGithub';
 import { getProfileById, deleteEmployee } from '../../actions/profile';
 
-const Profile = ({
+export const UnconnectedProfile = ({
   getProfileById,
   deleteEmployee,
   profile: { profile, loading },
@@ -20,9 +20,9 @@ const Profile = ({
     getProfileById(params.id);
   }, [getProfileById, params.id]);
   return (
-    <Fragment data-test='component-profile'>
+    <Fragment>
       {profile === null || loading ? (
-        <Spinner />
+        <Spinner data-test='component-spinner' />
       ) : (
         <Fragment>
           <Link to='/profiles' className='btn btn-light'>
@@ -42,6 +42,7 @@ const Profile = ({
             )}
           {auth.user.isAdmin && (
             <button
+              data-test='delete-button'
               className='btn btn-danger'
               onClick={() => {
                 deleteEmployee(params.id, history);
@@ -51,12 +52,15 @@ const Profile = ({
             </button>
           )}
           <div className='profile-grid my-1'>
-            <ProfileTop data-test='profile-top' profile={profile} />
-            <ProfileAbout data-test='profile-about' profile={profile} />
+            <ProfileTop data-test='component-profile-top' profile={profile} />
+            <ProfileAbout
+              data-test='component-profile-about'
+              profile={profile}
+            />
 
             {profile.githubusername && (
               <ProfileGithub
-                data-test='profile-github'
+                data-test='component-profile-github'
                 username={profile.githubusername}
               />
             )}
@@ -67,7 +71,7 @@ const Profile = ({
   );
 };
 
-Profile.propTypes = {
+UnconnectedProfile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
   deleteEmployee: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
@@ -82,4 +86,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { getProfileById, deleteEmployee }
-)(Profile);
+)(UnconnectedProfile);

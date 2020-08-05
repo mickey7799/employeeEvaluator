@@ -13,7 +13,6 @@ const setup = (initialState = {}) => {
       <Profiles store={store} />
     </Router>
   );
-  //   console.log(wrapper.debug());
   return wrapper;
 };
 
@@ -177,11 +176,9 @@ describe('redux props', () => {
   beforeEach(() => {
     const store = storeFactory(initialState);
     wrapper = shallow(<Profiles store={store} />).dive();
-    console.log(wrapper.debug());
   });
 
   test('has auth and profile state as prop', () => {
-    console.log(wrapper.props());
     const authProp = wrapper.props().auth;
     const profileProp = wrapper.props().profile;
     expect(authProp).toEqual(initialState.auth);
