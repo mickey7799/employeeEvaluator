@@ -11,6 +11,7 @@ import Profile from '../profile/Profile';
 import CreateEmployee from '../profile-forms/CreateEmployee';
 import Reviews from '../reviews/Reviews';
 import Review from '../review/Review';
+import NotFound from '../layout/NotFound';
 import PrivateRoute from './PrivateRoute';
 
 const Routes = props => {
@@ -29,6 +30,7 @@ const Routes = props => {
         <PrivateRoute exact path='/reviews' component={Reviews} />
         <PrivateRoute exact path='/reviews/:id' component={Reviews} />
         <PrivateRoute exact path='/review/:id' component={Review} />
+        <Route component={NotFound} />
       </Switch>
     </section>
   );
