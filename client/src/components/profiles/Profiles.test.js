@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { findByTestAttr, storeFactory } from '../../../test/testUtils';
 import Profiles from './Profiles';
@@ -7,8 +8,12 @@ import Profiles from './Profiles';
 //Factory function to create a ShallowWrapper for the Profiles component.
 const setup = (initialState = {}) => {
   const store = storeFactory(initialState);
-  const wrapper = shallow(<Profiles store={store} />).dive();
-
+  const wrapper = mount(
+    <Router>
+      <Profiles store={store} />
+    </Router>
+  );
+  //   console.log(wrapper.debug());
   return wrapper;
 };
 
@@ -16,28 +21,84 @@ describe('render', () => {
   describe('user is admin & profiles length >0', () => {
     let wrapper;
     beforeEach(() => {
-      const initialState = {};
+      const initialState = {
+        auth: {
+          user: { isAdmin: true }
+        },
+        profile: {
+          profile: {},
+          profiles: [
+            {
+              skills: ['JS'],
+              user: { name: 'Amy' },
+              department: 'R&D',
+              bio: '',
+              status: 'Intern'
+            }
+          ],
+          loading: false
+        }
+      };
       wrapper = setup(initialState);
     });
 
     test('renders create employee', () => {
-      console.log(wrapper);
+      wrapper = setup({
+        auth: {
+          user: { isAdmin: true }
+        },
+        profile: {
+          profile: {},
+          profiles: [],
+          loading: false
+        }
+      });
       const createEmployee = findByTestAttr(wrapper, 'create-employee');
-      expect(createEmployee.length).toBe(1);
+      expect(createEmployee.length).toBeGreaterThan(0);
     });
-    test('renders profile item', () => {
+    test('renders profile item with profiles length > 0', () => {
+      wrapper = setup({
+        auth: {
+          user: { isAdmin: true }
+        },
+        profile: {
+          profile: {},
+          profiles: [
+            {
+              skills: ['JS'],
+              user: { name: 'Amy' },
+              department: 'R&D',
+              bio: '',
+              status: 'Intern'
+            }
+          ],
+          loading: false
+        }
+      });
       const profileItem = findByTestAttr(wrapper, 'profile-item');
       expect(profileItem.length).toBe(1);
     });
-  });
-  describe('user is not an admin && profiles length == 0', () => {
-    let wrapper;
-    beforeEach(() => {
-      const initialState = {
+    test('not renders profile item with profiles length == 0', () => {
+      wrapper = setup({
         auth: {
-          token: '',
-          isAuthenticated: false,
-          loading: true,
+          user: { isAdmin: true }
+        },
+        profile: {
+          profile: {},
+          profiles: [],
+          loading: false
+        }
+      });
+      const profileItem = findByTestAttr(wrapper, 'profile-item');
+      expect(profileItem.length).toBe(0);
+    });
+  });
+  describe('user is not an admin', () => {
+    let wrapper;
+    test('not renders create employee', () => {
+      wrapper = setup({
+        auth: {
+          loading: false,
           user: { isAdmin: false }
         },
         profile: {
@@ -47,15 +108,50 @@ describe('render', () => {
           loading: true,
           error: {}
         }
-      };
-      wrapper = setup(initialState);
-    });
-
-    test('renders create employee', () => {
+      });
       const createEmployee = findByTestAttr(wrapper, 'create-employee');
       expect(createEmployee.length).toBe(0);
     });
-    test('renders profile item', () => {
+    test('renders profile item with profiles length > 0', () => {
+      wrapper = setup({
+        auth: {
+          loading: false,
+          user: { isAdmin: false }
+        },
+        profile: {
+          profile: {},
+          profiles: [
+            {
+              skills: ['JS'],
+              user: { name: 'Amy' },
+              department: 'R&D',
+              bio: '',
+              status: 'Intern'
+            }
+          ],
+          repos: [],
+          loading: true,
+          error: {}
+        }
+      });
+      const profileItem = findByTestAttr(wrapper, 'profile-item');
+      expect(profileItem.length).toBe(1);
+    });
+
+    test('not renders profile item with profiles length==0', () => {
+      wrapper = setup({
+        auth: {
+          loading: false,
+          user: { isAdmin: false }
+        },
+        profile: {
+          profile: {},
+          profiles: [],
+          repos: [],
+          loading: true,
+          error: {}
+        }
+      });
       const profileItem = findByTestAttr(wrapper, 'profile-item');
       expect(profileItem.length).toBe(0);
     });
@@ -63,31 +159,36 @@ describe('render', () => {
 });
 
 describe('redux props', () => {
+  let wrapper;
+  const initialState = {
+    auth: {
+      isAuthenticated: false,
+      loading: true,
+      user: null
+    },
+    profile: {
+      profile: {},
+      profiles: [],
+      repos: [],
+      loading: true,
+      error: {}
+    }
+  };
+  beforeEach(() => {
+    const store = storeFactory(initialState);
+    wrapper = shallow(<Profiles store={store} />).dive();
+    console.log(wrapper.debug());
+  });
+
   test('has auth and profile state as prop', () => {
-    const initialState = {
-      auth: {
-        token: '',
-        isAuthenticated: false,
-        loading: true,
-        user: null
-      },
-      profile: {
-        profile: {},
-        profiles: [],
-        repos: [],
-        loading: true,
-        error: {}
-      }
-    };
-    const wrapper = setup(initialState);
-    const authProp = wrapper.instance().props.auth;
-    const profileProp = wrapper.instance().props.profile;
+    console.log(wrapper.props());
+    const authProp = wrapper.props().auth;
+    const profileProp = wrapper.props().profile;
     expect(authProp).toEqual(initialState.auth);
     expect(profileProp).toEqual(initialState.profile);
   });
   test('`getProfiles` action creator is a function prop', () => {
-    const wrapper = setup();
-    const getProfilesProp = wrapper.instance().props.getProfiles;
+    const getProfilesProp = wrapper.props().getProfiles;
     expect(getProfilesProp).toBeInstanceOf(Function);
   });
 });
