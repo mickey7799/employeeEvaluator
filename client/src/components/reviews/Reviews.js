@@ -23,7 +23,14 @@ const Reviews = ({
     if (user.isAdmin) getReviewsByUserId(params.id);
     else getReviewsByReviewerId(user._id);
     getProfiles();
-  }, [getReviewsByUserId, getReviewsByReviewerId, getProfiles]);
+  }, [
+    getReviewsByUserId,
+    getReviewsByReviewerId,
+    getProfiles,
+    params.id,
+    user._id,
+    user.isAdmin
+  ]);
 
   return (
     <Fragment>

@@ -20,7 +20,7 @@ const Profiles = ({
         <Spinner />
       ) : (
         <Fragment>
-          <h1 className='large text-primary'> Employees List</h1>
+          <h1 className='large text-primary'> Employee List</h1>
           <p className='lead'>
             <i className='fab fa-connectdevelop'></i> View employee profiles or
             give performance reviews to each employee

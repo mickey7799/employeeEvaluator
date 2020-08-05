@@ -66,7 +66,12 @@ export const getGithubRepos = username => async dispatch => {
 //Creare new employee account and profile
 export const createEmployee = (formData, history) => async dispatch => {
   try {
-    await axios.post('/api/users/employee', formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    await axios.post('/api/users/employee', formData, config);
     dispatch(setAlert('Employee Created', 'success'));
     history.push('/profiles');
   } catch (err) {
@@ -89,7 +94,16 @@ export const createProfile = (
   edit = false
 ) => async dispatch => {
   try {
-    const res = await axios.post(`/api/profile/${employee_id}`, formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const res = await axios.post(
+      `/api/profile/${employee_id}`,
+      formData,
+      config
+    );
     dispatch({ type: GET_PROFILE, payload: res.data });
     dispatch(setAlert(edit ? 'Profile Update' : 'Profile Created', 'success'));
     if (!edit) {

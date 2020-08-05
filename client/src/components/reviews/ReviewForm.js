@@ -23,7 +23,7 @@ const ReviewForm = ({
 
   useEffect(() => {
     clearReview();
-  }, []);
+  }, [clearReview]);
 
   useEffect(() => {
     if (!review) {
