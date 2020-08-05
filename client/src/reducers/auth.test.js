@@ -13,7 +13,6 @@ import authReducer from './auth';
 
 describe('Auth reducer testing', () => {
   window.localStorage.__proto__.setItem = jest.fn();
-  window.localStorage.__proto__.setItem.mockClear();
 
   const defaultState = {
     token: localStorage.getItem('token'),
@@ -33,23 +32,41 @@ describe('Auth reducer testing', () => {
     const newState = authReducer(undefined, {});
     expect(newState).toEqual(defaultState);
   });
-  test('returns state of "false" on loading and true on isAuthenticated upon receiving an action of type `REGISTER_SUCCESS`', () => {
-    const newState = authReducer(defaultState, { type: REGISTER_SUCCESS });
+  test('returns state of "false" on loading, update token, and true on isAuthenticated upon receiving an action of type `REGISTER_SUCCESS`', () => {
+    const payload = { token: 'abc' };
+    const newState = authReducer(defaultState, {
+      type: REGISTER_SUCCESS,
+      payload
+    });
+
+    expect(newState.token).toBe('abc');
     expect(localStorage.setItem).toHaveBeenCalled();
     expect(newState.isAuthenticated).toBe(true);
     expect(newState.loading).toBe(false);
   });
-  test('returns state of "false" on loading and true on isAuthenticated upon receiving an action of type `LOGIN_SUCCESS`', () => {
-    const newState = authReducer(defaultState, { type: LOGIN_SUCCESS });
+  test('returns state of "false" on loading, update token, and true on isAuthenticated upon receiving an action of type `LOGIN_SUCCESS`', () => {
+    const payload = { token: 'abc' };
+    const newState = authReducer(defaultState, {
+      type: LOGIN_SUCCESS,
+      payload
+    });
+    expect(newState.token).toBe('abc');
     expect(newState.isAuthenticated).toBe(true);
     expect(localStorage.setItem).toHaveBeenCalled();
     expect(newState.loading).toBe(false);
   });
-  test('returns state of "false" on loading, not null on user and true on isAuthenticated upon receiving an action of type `USER_LOADED`', () => {
-    const newState = authReducer(undefined, { type: USER_LOADED });
+  test('returns state of "false" on loading, update user and true on isAuthenticated upon receiving an action of type `USER_LOADED`', () => {
+    const payload = {
+      skills: ['JS'],
+      user: { name: 'Amy' },
+      department: 'R&D',
+      bio: '',
+      status: 'Intern'
+    };
+    const newState = authReducer(undefined, { type: USER_LOADED, payload });
+    expect(newState.user).toEqual(payload);
     expect(newState.loading).toBe(false);
     expect(newState.isAuthenticated).toBe(true);
-    expect(newState.user).not.toBe(null);
   });
 
   test('returns state of "false" on loading, null on token, and false on isAuthenticated upon receiving an action of type `REGISTER_FAIL`', () => {
