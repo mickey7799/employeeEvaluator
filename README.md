@@ -8,13 +8,13 @@ A web application that allows employees to submit feedback toward each other's p
 
 ## Technologies used
 
-/Client/ (React-Redux) => /Rest API/ (Nodejs) => /Database/ (MongoDB)
+**Client** (React-Redux) => **Rest API** (Nodejs) => **Database** (MongoDB)
 
-### /Client/
+### **Client**
 
 - React, Redux, React Hooks
 
-### /Server/
+### **Server**
 
 - Node, Express, MongoDB
 
@@ -56,7 +56,7 @@ POST api/users/employee
 POST api/auth
 ```
 
-#### Database :
+#### Database Model:
 
 ```javascript
 Profile Schema
@@ -127,7 +127,7 @@ User Schema
 
 # Finished Tasks
 
-### /client/
+### **client**
 
 1. Login and authentication
 2. Create Account
@@ -137,7 +137,7 @@ User Schema
 6. ADMIN and Employee View
 7. Unit tests for reducer/ integration tests for reducers & action creators & Components
 
-### /server/
+### **server**
 
 1. Login and authentication
 2. CRUD employee profiles
@@ -169,6 +169,6 @@ User Schema
 `npm run dev`
 
 ### Run client testing
-`cd ..`
+`cd client`
 `npm run test`
 
