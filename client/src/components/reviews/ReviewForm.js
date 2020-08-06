@@ -11,6 +11,7 @@ const ReviewForm = ({
   addReview,
   clearReview,
   getReviewsByUserId,
+  user,
   employee_id,
   profiles,
   review
@@ -94,11 +95,14 @@ const ReviewForm = ({
             onChange={e => onChange(e)}
           >
             <option value='0'>* Select The Reviewer</option>
-            {profiles.map(profile => (
-              <option key={profile.user._id} value={profile.user._id}>
-                {profile.user.name}
-              </option>
-            ))}
+            {profiles.map(profile =>
+              profile.user._id !== employee_id &&
+              profile.user._id !== user._id ? (
+                <option key={profile.user._id} value={profile.user._id}>
+                  {profile.user.name}
+                </option>
+              ) : null
+            )}
           </select>
           <small className='form-text'>
             Choose reviewers for this employee

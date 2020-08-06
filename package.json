@@ -8,6 +8,8 @@
     "server": "nodemon server",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test-server": "jest --testPathPattern='tests'",
+    "test-client": "jest --testPathPattern='client'",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Vickey",
@@ -26,9 +28,8 @@
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "jest-enzyme": "^7.1.2",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2",
+    "jest": "^24.9.0"
   }
 }

@@ -45,6 +45,7 @@ const Reviews = ({
             employees
           </p>
           <ReviewForm
+            user={user}
             employee_id={params.id}
             profiles={profiles}
             review={review}

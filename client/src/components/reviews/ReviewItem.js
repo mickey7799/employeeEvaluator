@@ -9,7 +9,7 @@ const ReviewItem = ({
   deleteReview,
   getReview,
   auth,
-  review: { _id, text, name, avatar, user, feedbacks, rating, date },
+  review: { _id, text, name, avatar, user, admin, feedbacks, rating, date },
   showActions
 }) => (
   <div className='post bg-white p-1 my-1'>
@@ -39,7 +39,7 @@ const ReviewItem = ({
             )}
           </Link>
 
-          {!auth.loading && auth.user.isAdmin && (
+          {!auth.loading && auth.user.isAdmin && admin === auth.user._id ? (
             <Fragment>
               <button
                 onClick={() => getReview(_id)}
@@ -56,7 +56,7 @@ const ReviewItem = ({
                 <i className='fas fa-times' />
               </button>
             </Fragment>
-          )}
+          ) : null}
         </Fragment>
       )}
     </div>
