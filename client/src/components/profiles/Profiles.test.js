@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { findByTestAttr, storeFactory } from '../../../test/testUtils';
 import Profiles from './Profiles';
 
-//Factory function to create a ShallowWrapper for the Profiles component.
+//Factory function to create a Wrapper for the Profiles component.
 const setup = (initialState = {}) => {
   const store = storeFactory(initialState);
   const wrapper = mount(

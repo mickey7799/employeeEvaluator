@@ -39,15 +39,10 @@ const FeedbackItem = ({
 FeedbackItem.propTypes = {
   reviewId: PropTypes.string.isRequired,
   feedback: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
   deleteFeedback: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
 export default connect(
-  mapStateToProps,
+  null,
   { deleteFeedback }
 )(FeedbackItem);

@@ -5,7 +5,7 @@ import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import { deleteReview, getReview } from '../../actions/review';
 
-const ReviewItem = ({
+export const UnconnectedReviewItem = ({
   deleteReview,
   getReview,
   auth,
@@ -42,6 +42,7 @@ const ReviewItem = ({
           {!auth.loading && auth.user.isAdmin && admin === auth.user._id ? (
             <Fragment>
               <button
+                data-test='edit-button'
                 onClick={() => getReview(_id)}
                 type='button'
                 className='btn btn-light'
@@ -49,6 +50,7 @@ const ReviewItem = ({
                 Edit Review
               </button>
               <button
+                data-test='delete-button'
                 onClick={() => deleteReview(_id)}
                 type='button'
                 className='btn btn-danger'
@@ -63,11 +65,11 @@ const ReviewItem = ({
   </div>
 );
 
-ReviewItem.defaultProps = {
+UnconnectedReviewItem.defaultProps = {
   showActions: true
 };
 
-ReviewItem.propTypes = {
+UnconnectedReviewItem.propTypes = {
   review: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   deleteReview: PropTypes.func.isRequired,
@@ -78,8 +80,7 @@ ReviewItem.propTypes = {
 const mapStateToProps = state => ({
   auth: state.auth
 });
-
 export default connect(
   mapStateToProps,
   { deleteReview, getReview }
-)(ReviewItem);
+)(UnconnectedReviewItem);

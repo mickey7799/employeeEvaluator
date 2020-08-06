@@ -40,6 +40,7 @@ const Profiles = ({
                 <ProfileItem
                   data-test='profile-item'
                   key={profile._id}
+                  id={profile._id}
                   profile={profile}
                 />
               ))

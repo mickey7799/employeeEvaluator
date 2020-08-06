@@ -45,6 +45,7 @@ const Reviews = ({
             employees
           </p>
           <ReviewForm
+            data-test='component-review-form'
             user={user}
             employee_id={params.id}
             profiles={profiles}
@@ -61,7 +62,11 @@ const Reviews = ({
       <div className='posts'>
         {reviews &&
           reviews.map(review => (
-            <ReviewItem key={review._id} review={review} />
+            <ReviewItem
+              key={review._id}
+              review={review}
+              data-test='component-review-item'
+            />
           ))}
       </div>
     </Fragment>

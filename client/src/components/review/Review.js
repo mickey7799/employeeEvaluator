@@ -8,23 +8,29 @@ import FeedbackForm from './FeedbackForm';
 import FeedbackItem from './FeedbackItem';
 import { getReview } from '../../actions/review';
 
-const Review = ({ getReview, review: { review, loading }, match }) => {
+const Review = ({ getReview, auth, review: { review, loading }, match }) => {
   useEffect(() => {
     getReview(match.params.id);
   }, [getReview, match.params.id]);
 
   return loading || review === null ? (
-    <Spinner />
+    <Spinner data-test='component-spinner' />
   ) : (
     <Fragment>
       <Link to={`/reviews/${review.user}`} className='btn'>
         Back To Performance Reviews
       </Link>
-      <ReviewItem review={review} showActions={false} />
-      <FeedbackForm reviewId={review._id} />
+      <ReviewItem
+        data-test='component-review-item'
+        review={review}
+        showActions={false}
+      />
+      <FeedbackForm data-test='component-feedback-form' reviewId={review._id} />
       <div className='comments'>
         {review.feedbacks.map(feedback => (
           <FeedbackItem
+            data-test='component-feedback-item'
+            auth={auth}
             key={feedback._id}
             feedback={feedback}
             reviewId={review._id}
@@ -37,11 +43,13 @@ const Review = ({ getReview, review: { review, loading }, match }) => {
 
 Review.propTypes = {
   getReview: PropTypes.func.isRequired,
-  review: PropTypes.object.isRequired
+  review: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  review: state.review
+  review: state.review,
+  auth: state.auth
 });
 
 export default connect(

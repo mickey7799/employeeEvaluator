@@ -9,10 +9,10 @@ const ProfileItem = ({
     department,
     skills
   },
-  key
+  id
 }) => {
   return (
-    <div className='profile bg-light' key={key}>
+    <div className='profile bg-light' key={id}>
       <img src={avatar} alt='' className='round-img' />
       <div>
         <h2>{name}</h2>

@@ -4,9 +4,11 @@ A web application that allows employees to submit feedback toward each other's p
 
 # Demo
 
-[link](https://still-gorge-51871.herokuapp.com/)
+[Demo link](https://still-gorge-51871.herokuapp.com/)
 
 ## Technologies used
+
+/Client/ (React-Redux) => /Rest API/ (Nodejs) => /Database/ (MongoDB)
 
 ### /Client/
 
@@ -15,6 +17,92 @@ A web application that allows employees to submit feedback toward each other's p
 ### /Server/
 
 - Node, Express, MongoDB
+
+### API : 
+The RESTful API built using Nodejs, exposes CRUD endpoints for Profile, Review, and User data 
+
+**Endpoints for Profile Data**
+
+```
+GET api/profile/me
+POST api/profile/:employee_id
+GET api/profile
+GET api/profile/user/:user_id
+DELETE api/profile/
+DELETE api/profile/:employee_id
+GET api/profile/github/:username
+```
+
+**Endpoints for REVIEW Data**
+
+```
+POST api/reviews/:employee_id&:id
+GET api/reviews
+GET api/reviews/:id
+DELETE api/reviews/:id
+POST api/reviews/feedback/:id
+DELETE api/reviews/feedback/:id/:feedback_id
+```
+
+**Endpoints for User Data**
+
+```
+POST api/users
+POST api/users/employee
+```
+
+**Endpoints for Authentication**
+```
+POST api/auth
+```
+
+#### Database :
+
+```javascript
+Profile Schema
+{
+  user: Schema.Types.ObjectId,
+  department: String,
+  status: String,
+  skills: [String],
+  bio: String,
+  githubusername: String,
+  date: Date
+}
+
+Review Schema
+{
+  user: Schema.Types.ObjectId (refer to 'users'),
+  admin: Schema.Types.ObjectId (refer to 'users'),
+  text: String,
+  name: String,
+  avatar: String,
+  rating: Number,
+  feedbacks: [
+    {
+      user: Schema.Types.ObjectId (refer to 'users'),
+      text: String,
+      name: String,
+      avatar: String,
+      date: Date,
+    }
+  ],
+  reviewers: [
+    {String}
+  ],
+  date: Date,  
+}
+
+User Schema
+{
+  name: String,
+  email: String,
+  password: String,
+  avatar: String,
+  isAdmin: Boolean,
+  date: Date,
+}
+```
 
 ## Assumptions
 
@@ -58,4 +146,29 @@ A web application that allows employees to submit feedback toward each other's p
 
 # Pending Tasks
 
-1. Server side testing (integration tests & unit tests)
+1. Client side testing (some Component testing)
+2. Server side testing (integration tests & unit tests)
+
+## Available Scripts
+
+### Move into project directory
+`cd employeeEvaluator`
+
+### Installs server node modules
+`npm install`
+
+### Move into client folder
+`cd client`
+### Installs client node modules
+`npm install`
+
+### Move back to project directory
+`cd ..`
+
+### Runs the app in the development mode for server and client concurrently 
+`npm run dev`
+
+### Run client testing
+`cd ..`
+`npm run test`
+

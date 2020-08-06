@@ -14,7 +14,6 @@ describe('Alert reducer testing', () => {
       payload
     });
     expect(newState.length).toBe(1);
-    console.log(newState);
     expect(newState[0].msg).toBe('Profile updated');
     expect(newState[0].alertType).toBe('success');
   });
@@ -26,7 +25,6 @@ describe('Alert reducer testing', () => {
       ],
       { type: REMOVE_ALERT, payload: 1 }
     );
-    console.log(newState);
     expect(newState[0]).toEqual({
       msg: 'Profile created',
       alertType: 'success',

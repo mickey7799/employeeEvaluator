@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { findByTestAttr, storeFactory } from '../../../test/testUtils';
 import Profile, { UnconnectedProfile } from './Profile';
 
-//Factory function to create a ShallowWrapper for the Profile component.
+//Factory function to create a Wrapper for the Profile component.
 const setup = (initialState = {}, props) => {
   const store = storeFactory(initialState);
   const wrapper = mount(
@@ -92,8 +92,8 @@ describe('render', () => {
           history: { push: jest.fn() }
         }
       );
-      const editProfile = findByTestAttr(wrapper, 'delete-button');
-      expect(editProfile.length).toBe(0);
+      const deleteButton = findByTestAttr(wrapper, 'delete-button');
+      expect(deleteButton.length).toBe(0);
     });
     test('renders spinner with profile === null', () => {
       wrapper = setup(
@@ -114,8 +114,8 @@ describe('render', () => {
           history: { push: jest.fn() }
         }
       );
-      const editProfile = findByTestAttr(wrapper, 'component-spinner');
-      expect(editProfile.length).toBe(1);
+      const spinner = findByTestAttr(wrapper, 'component-spinner');
+      expect(spinner.length).toBe(1);
     });
     test('renders spinner with loading true', () => {
       wrapper = setup(
@@ -144,8 +144,8 @@ describe('render', () => {
           history: { push: jest.fn() }
         }
       );
-      const editProfile = findByTestAttr(wrapper, 'component-spinner');
-      expect(editProfile.length).toBe(1);
+      const spinner = findByTestAttr(wrapper, 'component-spinner');
+      expect(spinner.length).toBe(1);
     });
   });
 
@@ -221,8 +221,8 @@ describe('render', () => {
           history: { push: jest.fn() }
         }
       );
-      const editProfile = findByTestAttr(wrapper, 'component-spinner');
-      expect(editProfile.length).toBe(1);
+      const spinner = findByTestAttr(wrapper, 'component-spinner');
+      expect(spinner.length).toBe(1);
     });
     test('renders spinner with loading true', () => {
       wrapper = setup(
@@ -251,8 +251,8 @@ describe('render', () => {
           history: { push: jest.fn() }
         }
       );
-      const editProfile = findByTestAttr(wrapper, 'component-spinner');
-      expect(editProfile.length).toBe(1);
+      const spinner = findByTestAttr(wrapper, 'component-spinner');
+      expect(spinner.length).toBe(1);
     });
   });
 });
